@@ -23,3 +23,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Auth::routes(['verify' => true]);
+Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => ['logincheck:admin']], function () {
+        Route::resource('admin', AdminController::class);
+    });
+    Route::group(['middleware' => ['logincheck:user']], function () {
+        Route::resource('user', UserController::class);
+    });
+});
